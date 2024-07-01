@@ -1,8 +1,23 @@
-# cython_setup.py
-
-from distutils.core import setup
+from setuptools import setup, Extension
 from Cython.Build import cythonize
+import numpy
+
+extensions = [
+    Extension(
+        "cython_example",
+        ["cython_example.pyx"],
+        include_dirs=[numpy.get_include()],  # Include NumPy headers if needed
+        extra_compile_args=["-O3"],  # Optimization flag
+        extra_link_args=[],
+    ),
+    # Add more extensions here if needed
+]
 
 setup(
-    ext_modules=cythonize("cython_example.pyx")
+    name="cython_example",
+    ext_modules=cythonize(
+        extensions,
+        compiler_directives={"language_level": "3", "boundscheck": False, "wraparound": False},
+    ),
+    zip_safe=False,
 )
